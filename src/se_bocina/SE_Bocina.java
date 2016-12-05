@@ -32,7 +32,7 @@ public class SE_Bocina {
 
         try {
 //            Scanner input = new Scanner(new BufferedReader(new FileReader(fileName)));
-              Scanner input = new Scanner(new File(fileName), "Unicode");
+            Scanner input = new Scanner(new File(fileName), "Unicode");
             input.useDelimiter("\\s*;\\s*|\n");
             ArrayList<Rule> test = new ArrayList<>();
 
@@ -42,11 +42,11 @@ public class SE_Bocina {
                 int valor = input.nextInt();
                 test.add(new Rule(pregunta, valor, Integer.toString(id)));
             }
-            
-            for(int i = 0; i < test.size(); i++){
+
+            for (int i = 0; i < test.size(); i++) {
 //                System.out.println(test.get(i).toString());
             }
-            
+
             System.out.println(test.get(1).getPregunta() + "?");
             Rule ru = new Rule("Hola1", 1, test);
             System.out.println(ru.getOpciones().get(1).getPregunta());

@@ -6,6 +6,8 @@
 package se_bocina;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JLabel;
 
 /**
@@ -17,10 +19,41 @@ public class Interfaz extends javax.swing.JFrame {
     /**
      * Creates new form Interfaz
      */
+    ArrayList<Rule> rules = new ArrayList<>();
+    int pregunta_actual = 0;
+    int cadena_actual = 1;
+    int valor_default;
+    String recomendacion = null;
+    boolean ended = false;
+
     public Interfaz() {
         initComponents();
-        Question.setText("<html><center>" + "Cable auxiliar conectado correctamente" + "</center></html>");
-        Question.setPreferredSize(new Dimension(1, 1)); // this is the key part.
+
+        addRules();
+
+        //Making Label Resizabble and centered
+        Question.setText("<html><center>" + rules.get(pregunta_actual).getPregunta() + "?</center></html>");
+        Question.setPreferredSize(new Dimension(1, 1));
+
+    }
+
+    public final void addRules() {
+        rules.add(new Rule("Bocina se parea", 0, "1,6,7,8"));
+        rules.add(new Rule("Bocina enciende", 0, "2,9,10,11"));
+        rules.add(new Rule("Baja calidad de sonido", 1, "3,7,12,13"));
+        rules.add(new Rule("Botones funcionan", 0, "4,7,14,15"));
+        rules.add(new Rule("Microfono funciona", 0, "5,16"));
+        rules.add(new Rule("Bocina está encendida", 0, "Encienda la bocina"));
+        rules.add(new Rule("Bocina está fuera de rango", 1, "Mueva la bocina más cerca hacia su dispositivo (max 30 pies)"));
+        rules.add(new Rule("Dispositivo soporta Bluetooth 4.0", 0, "Use otro dispositivo o conectarlo por cable directo al puerto AUX (cable no incluido)"));
+        rules.add(new Rule("Bocina tiene carga", 0, "Conecte la bocina con el cable para cargar hasta que el indicador de batería se llene."));
+        rules.add(new Rule("Cable de carga defectuoso", 1, "Reemplaze el cable micro USB con otro"));
+        rules.add(new Rule("Batería defectuosa", 1, "Contacte al fabricante"));
+        rules.add(new Rule("Cable auxiliar conectado correctamente", 0, "Revise que el cable entre completamente hasta el fondo en el puerto auxiliar y que el puerto no se encuentre sucio u obstruido."));
+        rules.add(new Rule("Bocinas dañadas", 1, "Contacte al fabricante o reeplazelas"));
+        rules.add(new Rule("Funciones restringidas", 1, "Si el dispositivo está conectado por el puerto auxiliar (AUX), tiene que usar su dispositivo para controlar el volumen y las demás funciones"));
+        rules.add(new Rule("Botones pegajosos", 1, "Limpie suavemente los botones con un cepillo o algodón ligeramente húmedo. Secar correctamente y no dejar que el cepillo o algodón gotear con agua."));
+        rules.add(new Rule("Microfono apunta direccion correcta", 0, "Asegúrese que el dispositivo esté encendido y que la luz LED encima de la bocina esté del lado más cercano a usted."));
     }
 
     /**
@@ -74,6 +107,11 @@ public class Interfaz extends javax.swing.JFrame {
 
         Negative.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         Negative.setText("No");
+        Negative.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NegativeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -103,7 +141,25 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void PositiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PositiveActionPerformed
         // TODO add your handling code here:
+
+        if (pregunta_actual < (rules.size() - 1)) {
+            decisiones(1);
+        } else {
+            System.out.println("No hay mas preguntas");
+        }
+
     }//GEN-LAST:event_PositiveActionPerformed
+
+    private void NegativeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NegativeActionPerformed
+        // TODO add your handling code here:
+
+        if (pregunta_actual < (rules.size() - 1)) {
+            decisiones(0);
+        } else {
+            System.out.println("No hay mas preguntas");
+        }
+
+    }//GEN-LAST:event_NegativeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -147,4 +203,58 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
+
+    private void decisiones(int respuesta_dada) {
+
+        /**
+         * Cadena_actual 1,6,7,8; 2,9,10,11; 3,7,12,13; 4,7,14,15; 5,16;
+         * pregunta_actual 0,5,6,7; 1,8, 9,10; 2,6,11,12; 3,6,13,14; 4,15;
+         */
+        valor_default = rules.get(pregunta_actual).getValor();
+
+        switch (cadena_actual) {
+            case 1:
+                System.out.println("Bloque 1");
+                if ((pregunta_actual == 0) && (valor_default == respuesta_dada)) {
+                    System.out.println("Primera Pregunta!");
+                    pregunta_actual = 5;
+                    break;
+                } else if ((pregunta_actual == 0) && (valor_default != respuesta_dada)) {
+                    cadena_actual++;
+                    break;
+                }
+
+                if ((pregunta_actual <= 8) && valor_default == respuesta_dada) {
+                    recomendacion = rules.get(pregunta_actual).getRespuesta();
+                    Question.setText("<html><center>Recomendacion: " + recomendacion + "</center></html>");
+                    System.out.println("END");
+                    ended = true;
+                } else if (pregunta_actual > 7) {
+                    cadena_actual++;
+                    System.out.println("Cambiando Cadena");
+                }
+
+                break;
+            case 2:
+                System.out.println("Bloque 2");
+                break;
+            case 3:
+                System.out.println("Bloque 3");
+                break;
+            case 4:
+                System.out.println("Bloque 4");
+                break;
+            case 5:
+                System.out.println("Bloque 5");
+                break;
+        }
+
+        if (ended == false) {
+            //Avanzar a la siguiente pregunta
+            pregunta_actual++;
+            Question.setText("<html><center>" + rules.get(pregunta_actual).getPregunta() + "?</center></html>");
+        }else{
+            System.out.println("Eso es todo!");
+        }
+    }
 }
