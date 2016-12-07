@@ -326,7 +326,7 @@ public class Interfaz extends javax.swing.JFrame {
                     System.out.println("END");
                     ended = true;
                     endScreen(1);
-                } else if (pregunta_actual > 12) {
+                } else if (pregunta_actual > 11) {
                     ended = true;
                     endScreen(0);
                 } else {
@@ -357,7 +357,7 @@ public class Interfaz extends javax.swing.JFrame {
                     System.out.println("END");
                     ended = true;
                     endScreen(1);
-                } else if (pregunta_actual > 14) {
+                } else if (pregunta_actual > 13) {
                     ended = true;
                     endScreen(0);
                 } else {
@@ -388,7 +388,7 @@ public class Interfaz extends javax.swing.JFrame {
                     System.out.println("END");
                     ended = true;
                     endScreen(1);
-                } else if (pregunta_actual > 15) {
+                } else if (pregunta_actual > 14) {
                     ended = true;
                     endScreen(0);
                 }
